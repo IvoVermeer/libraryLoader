@@ -1,0 +1,9 @@
+{
+	"libs": [
+		"browser"
+	],
+	"loadEagerly": [
+		"../js/simpletest.js",
+		"../../lib/libraryLoader.js"
+	]
+}

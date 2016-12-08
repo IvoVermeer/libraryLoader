@@ -1,0 +1,8 @@
+{
+	"libs": [
+		"browser"
+	],
+	"loadEagerly": [
+		"lib/libraryLoader.js"
+	]
+}
