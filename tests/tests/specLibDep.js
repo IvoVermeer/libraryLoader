@@ -15,7 +15,7 @@ Load dependencies out of order. Example:
  */
 
 tests({
-	'It should accept load a library after all dependencies are done loading': function () {
+	'It should load a library only after all dependencies are done loading': function () {
 		libraryLoader('app', ['router'], function(router) {
 			return {
 				name: 'App module',
