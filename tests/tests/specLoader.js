@@ -45,16 +45,16 @@ tests({
 		var testLibTwo = libraryLoader('testLibTwo');
 		eq(testLibTwo, 'I am the dependency');
 	},
-	'If library has not been defined, throw an exception': function () {
-		var thrownError;
-		try {
-			libraryLoader('undefinedLib');
-		}
-		catch (e) {
-			thrownError = e;
-		}
-		finally {
-			eq(thrownError, 'Library not defined');
-		}
-	}
+	// 'If library has not been defined, throw an exception': function () {
+	// 	var thrownError;
+	// 	try {
+	// 		libraryLoader('undefinedLib');
+	// 	}
+	// 	catch (e) {
+	// 		thrownError = e;
+	// 	}
+	// 	finally {
+	// 		eq(thrownError, 'Library not defined');
+	// 	}
+	// }
 });
