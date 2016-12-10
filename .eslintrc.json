@@ -24,6 +24,7 @@
     "globals": {
         "tests": false,
         "eq": false,
+        "fail": false,
         "libraryLoader": false
     }
 }

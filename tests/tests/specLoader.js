@@ -11,7 +11,7 @@ No deps:
 
  */
 tests({
-	'It should call te function once.': function () {
+	'It should call the callback function once.': function () {
 		var timesCallbackHasRun = 0;
 		libraryLoader('testLib', [], function () {
 			timesCallbackHasRun++;
@@ -44,5 +44,17 @@ tests({
 		// assign the second library to a local variable
 		var testLibTwo = libraryLoader('testLibTwo');
 		eq(testLibTwo, 'I am the dependency');
+	},
+	'If library has not been defined, throw an exception': function () {
+		var thrownError;
+		try {
+			libraryLoader('undefinedLib');
+		}
+		catch (e) {
+			thrownError = e;
+		}
+		finally {
+			eq(thrownError, 'Library not defined');
+		}
 	}
 });
