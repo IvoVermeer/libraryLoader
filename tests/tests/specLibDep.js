@@ -33,22 +33,16 @@ tests({
 	'It should handle dependencies that have dependencies':function () {
 		libraryLoader('main', ['util'], function(util) {
 			return {
-				name: 'App module',
 				util: util
 			};
 		});
 
-		libraryLoader('util', ['storage'], function(storage) {
-			return storage;
-		});
-		libraryLoader('storage', ['coral'], function () {
-			return 'I am the storage!';
-		});
+		// create an unused library, to trigger queued items to be processed
 		libraryLoader('bmw', [], function() {
 			return 'I am unused';
 		});
 
-		eq(libraryLoader('main').name, 'App module');
-		eq(libraryLoader('main').util, 'I am the storage!');
+		// Because the storage dependency is never met, main should be undefined
+		eq(libraryLoader('main'), undefined);
 	}
 });
