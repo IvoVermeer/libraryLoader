@@ -1,4 +1,4 @@
-/* globals tests:false, eq:false, libraryLoader: flase, libraryLoaderUtils:false */
+/* globals tests:false, eq:false, fail: false, libraryLoader: flase, libraryLoaderUtils:false */
 /*
 No deps:
 	libraryLoader('myLibrary', [], function(){
@@ -10,27 +10,21 @@ No deps:
 	var myLib = libraryLoader('myLibrary');
 	console.log(myLib); // ==> 'bar'
 
+Utils:
+	libraryLoaderUtils.libraries();
+	returns '['myLibrary']'
  */
 tests({
 	'It should call the callback exactly once.': function () {
 		var timesCallbackHasRun = 0;
 		libraryLoader('testLib', [], function () {
 			timesCallbackHasRun++;
+			return 'testLib';
 		});
 		eq(1, timesCallbackHasRun);
-		libraryLoaderUtils.unLoad('testLib');
 	},
 	'It should return the library when called with one argument.': function () {
-		// Create the library
-		libraryLoader('testLib', [], function () {
-			return {
-				foo: 'bar'
-			};
-		});
-
-		// Assign the library to a local variable
-		var testLib = libraryLoader('testLib');
-		eq(testLib.foo, 'bar');
+		eq(libraryLoader('testLib'), 'testLib');
 	},
 	'It should accept an array of dependencies and pass those as arguments to the callback': function () {
 		// Create the first library
@@ -44,10 +38,64 @@ tests({
 		});
 
 		// assign the second library to a local variable
-		var testLibTwo = libraryLoader('testLibTwo');
-		eq(testLibTwo, 'I am the dependency');
+		eq(libraryLoader('testLibTwo'), 'I am the dependency');
 	},
-	'If library has not been defined, throw an exception': function () {
+	'It should put libraryLoaderUtils on the global object when run in the test enviroment.': function () {
+		eq('[object Object]', libraryLoaderUtils);
+	},
+	'It should be able to return the loaded libraries as an array.': function () {
+		var loadedLibraries = libraryLoaderUtils.libraries();
+		eq('testLib', loadedLibraries[0]);
+	},
+	'It should be able to unload libraries.': function () {
+		var originalLength = libraryLoaderUtils.libraries().length;
+		var firstLoadedLib = libraryLoaderUtils.libraries()[0];
+		libraryLoaderUtils.unload(firstLoadedLib.toString());
+		eq(originalLength - 1, libraryLoaderUtils.libraries().length);
+	},
+	'It should be able to return the queue array.': function () {
+		// put a library on the queue
+		libraryLoader('main', ['nonExistingDependency'], function (nonExistingDependency) {
+			return nonExistingDependency;
+		});
+		
+		// get a reference to the queue
+		var queuedCallbacks = libraryLoaderUtils.loaderQueue();
+		
+		// add a variable to indicate whether or not the queued callback is found
+		var queuedLibraryFound = false;
+		// Check the queuedCallbacks array for the libraryName main
+		queuedCallbacks.forEach(function (queueItem) {
+			if (queueItem.libraryName === 'main') {
+				queuedLibraryFound = true;
+			}
+		});
+		// check that the queue has the expected library
+		eq(true, queuedLibraryFound);
+		// Do not clear this queue, next test would fail otherwise
+	},
+	'It should be able to clear the queue.': function () {
+		// The main library loaded in the previous test, check that it still exists
+		// get a reference to the queue
+		var queuedCallbacks = libraryLoaderUtils.loaderQueue();
+		
+		// add a variable to indicate whether or not the queued callback is found
+		var queuedLibraryFound = false;
+		// Check the queuedCallbacks array for the libraryName main
+		queuedCallbacks.forEach(function (queueItem) {
+			if (queueItem.libraryName === 'main') {
+				queuedLibraryFound = true;
+			}
+		});
+		if (!queuedLibraryFound) {
+			fail('main should still be found at this point');
+		}
+
+		libraryLoaderUtils.clearQueue();
+		queuedCallbacks = libraryLoaderUtils.loaderQueue(); // refresh the reference
+		eq(0, queuedCallbacks.length);
+	},
+	'It should throw an exception if library has not been defined.': function () {
 		var thrownError;
 		try {
 			libraryLoader('undefinedLib');
