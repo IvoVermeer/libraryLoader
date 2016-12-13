@@ -4,9 +4,13 @@
 	<title>Library Loader Tests</title>
 </head>
 <body>
-<script src="../lib/libraryLoader.js"></script>
-<script src="js/simpletest.js"></script>
-<script src="tests/specLoader.js"></script>
-<script src='tests/specLibDep.js'></script>
+	<!-- Load the ibrary first -->
+	<script src="../lib/libraryLoader.js"></script>
+	<script src="js/simpletest.js"></script>
+	<!-- Run tests for non-test enviroments -->
+	<script src="tests/specLoaderNonTest.js"></script>
+	<!-- Relod the library and run tests -->
+	<script src="../lib/libraryLoader.js"></script>
+	<script src="tests/specLoader.js"></script>
 </body>
 </html>
