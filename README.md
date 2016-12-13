@@ -15,8 +15,7 @@ libraryLoader is (currently) only targeted at browser usage. Node and AMD are on
 
 
 ## Retrieving an existing library
-`libraryLoader(libraryName);`
-Will return the library
+`libraryLoader(libraryName); // Will return the library`
 
 ## Examples
 ### no dependencies:
