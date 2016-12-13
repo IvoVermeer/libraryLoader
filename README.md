@@ -6,7 +6,7 @@ This code is not targeted for production usage! I'm buildig this as part of my c
 libraryLoader is (currently) only targeted at browser usage. Node and AMD are on my ToDo list.
 
 # Usage
-libraryLoader() is exposed on the global object (`window`). There are two ways of calling it: register a new library or retrieve an existing one.
+`libraryLoader()` is exposed on the global object (`window`). There are two ways of calling it: register a new library or retrieve an existing one.
 
 ## Registering a new library
 `libraryLoader('libraryName', [[dependencyOne, dependencyTwo]], callback);`
